@@ -150,8 +150,8 @@ xuxieshi1 = ""
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    all_files = [f for f in os.listdir('/app')]
-    return str(all_files) #获取当前工作目录路径
+#     all_files = [f for f in os.listdir('/app')]
+#     return str(all_files) #获取当前工作目录路径
     global changtoushis
     text = request.form.get('text')
     print(text)
