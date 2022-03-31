@@ -150,7 +150,7 @@ def upload():
 #     return str(all_files) #获取当前工作目录路径
     global changtoushis
     text = request.form.get('text')
-    print(text)
+    return text
     acrostic = json.loads(text)
     print(acrostic)
     changtoushis = show2(acrostic=acrostic, prefix='一二三四五六七，七六五四三二一。', net = net)
