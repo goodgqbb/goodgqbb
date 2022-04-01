@@ -140,15 +140,10 @@ model_path = r'/app/net.pdparams'
 net.set_state_dict(P.load(model_path))
 
 
-
-changtoushis = ""
-xuxieshi1 = ""
-
 @app.route('/', methods=['POST'])
 def upload():
 #     all_files = [f for f in os.listdir('/app')]
 #     return str(all_files) #获取当前工作目录路径
-    changtoushis
     text = request.form.get('text')
     return text
     acrostic = json.loads(text)
@@ -159,7 +154,6 @@ def upload():
 
 @app.route('/upload1', methods=['POST'])
 def upload1():
-    xuxieshi1
     text = request.form.get('text')
     print(text)
     acrostic = json.loads(text)
