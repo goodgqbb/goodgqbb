@@ -8,14 +8,14 @@ import  os
 
 L=125
 dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
-allchars = get_allchars(dataset)
+
 
 def get_allchars(dataset):
     allchars = []
     for i in range(len(dataset)):
         allchars += [dataset[i][4].replace('\n', '')]
     return ''.join(allchars)
-
+allchars = get_allchars(dataset)
 def get_dict(allchars):
     char_freq_dict = dict()
     for char in allchars:
