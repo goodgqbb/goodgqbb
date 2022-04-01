@@ -13,21 +13,6 @@ def get_allchars(dataset):
         allchars += [dataset[i][4].replace('\n', '')]
     return ''.join(allchars)
 
-
-
-L=125
-dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
-allchars = get_allchars(dataset)
-char2id_dict, id2char_dict = get_dict(allchars)
-print(len(char2id_dict))
-char2id_dict['</s>'] = 7394
-char2id_dict['<START>'] = 7395
-char2id_dict['<END>'] = 7396
-id2char_dict[7394] = '</s>'
-id2char_dict[7395] = '<START>'
-id2char_dict[7396] = '<END>'
-
-
 def get_dict(allchars):
     char_freq_dict = dict()
     for char in allchars:
@@ -42,6 +27,19 @@ def get_dict(allchars):
         char2id_dict[char_freq_dict[i][0]] = i
         id2char_dict[i] = char_freq_dict[i][0]
     return char2id_dict, id2char_dict
+
+L=125
+dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
+allchars = get_allchars(dataset)
+char2id_dict, id2char_dict = get_dict(allchars)
+print(len(char2id_dict))
+char2id_dict['</s>'] = 7394
+char2id_dict['<START>'] = 7395
+char2id_dict['<END>'] = 7396
+id2char_dict[7394] = '</s>'
+id2char_dict[7395] = '<START>'
+id2char_dict[7396] = '<END>'
+
 
 
 def show1(result, prefix=None, net=None, char2id_dict=char2id_dict, id2char_dict=id2char_dict, L=L):
