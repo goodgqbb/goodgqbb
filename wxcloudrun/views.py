@@ -8,8 +8,10 @@ import  os
 
 L=125
 dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
-
-
+class Config:
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_COMMIT_TEARDOWN = True**
+app.config.from_object(Config)
 def get_allchars(dataset):
     allchars = []
     for i in range(len(dataset)):
