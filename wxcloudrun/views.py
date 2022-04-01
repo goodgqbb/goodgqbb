@@ -2,53 +2,9 @@ import numpy as np
 import json
 import paddle
 import paddle as P
-import paddle.nn as nn
-import paddle.nn.functional as F
-from datetime import datetime
 from flask import render_template, request,Flask
 from run import app
-import matplotlib.pyplot as plt
 import  os
-import jieba
-
-net = Net()
-model_path = r'/app/net.pdparams'
-net.set_state_dict(P.load(model_path))
-L=125
-dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
-allchars = get_allchars(dataset)
-
-
-char2id_dict, id2char_dict = get_dict(allchars)
-print(len(char2id_dict))
-char2id_dict['</s>'] = 7394
-char2id_dict['<START>'] = 7395
-char2id_dict['<END>'] = 7396
-id2char_dict[7394] = '</s>'
-id2char_dict[7395] = '<START>'
-id2char_dict[7396] = '<END>'
-
-
-class Net(paddle.nn.Layer):
-    def __init__(self, vocab_size=len(char2id_dict), embedding_dim=256, hidden_dim=512, num_layers=3):
-        super(Net, self).__init__()
-        self.embeddings = paddle.nn.Embedding(vocab_size, embedding_dim)
-        self.lstm = paddle.nn.LSTM(
-            input_size=embedding_dim,
-            hidden_size=hidden_dim,
-            num_layers=num_layers,
-        )
-        self.linear = paddle.nn.Linear(in_features=hidden_dim, out_features=vocab_size)
-
-    def forward(self, x, hidden=None):
-        y = self.embeddings(x)
-        if hidden is None:
-            y, hidden = self.lstm(y)
-        else:
-            y, hidden = self.lstm(y, hidden)
-        y = self.linear(y)
-        return y, hidden
-
 
 
 def get_allchars(dataset):
@@ -138,6 +94,50 @@ def show2(acrostic, prefix=None, net=None, char2id_dict=char2id_dict, id2char_di
         previous = id2char_dict[x.numpy()[0][0]]
         result += previous
     return ''.join(result)
+
+
+class Net(paddle.nn.Layer):
+    def __init__(self, vocab_size=len(char2id_dict), embedding_dim=256, hidden_dim=512, num_layers=3):
+        super(Net, self).__init__()
+        self.embeddings = paddle.nn.Embedding(vocab_size, embedding_dim)
+        self.lstm = paddle.nn.LSTM(
+            input_size=embedding_dim,
+            hidden_size=hidden_dim,
+            num_layers=num_layers,
+        )
+        self.linear = paddle.nn.Linear(in_features=hidden_dim, out_features=vocab_size)
+
+    def forward(self, x, hidden=None):
+        y = self.embeddings(x)
+        if hidden is None:
+            y, hidden = self.lstm(y)
+        else:
+            y, hidden = self.lstm(y, hidden)
+        y = self.linear(y)
+        return y, hidden
+
+    
+L=125
+dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
+allchars = get_allchars(dataset)
+
+
+
+net = Net()
+model_path = r'/app/net.pdparams'
+net.set_state_dict(P.load(model_path))
+
+
+char2id_dict, id2char_dict = get_dict(allchars)
+print(len(char2id_dict))
+char2id_dict['</s>'] = 7394
+char2id_dict['<START>'] = 7395
+char2id_dict['<END>'] = 7396
+id2char_dict[7394] = '</s>'
+id2char_dict[7395] = '<START>'
+id2char_dict[7396] = '<END>'
+    
+    
 
 @app.route('/', methods=['POST'])
 def upload():
