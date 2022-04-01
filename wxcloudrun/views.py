@@ -6,6 +6,9 @@ from flask import render_template, request,Flask
 from run import app
 import  os
 
+L=125
+dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
+allchars = get_allchars(dataset)
 
 def get_allchars(dataset):
     allchars = []
@@ -28,9 +31,7 @@ def get_dict(allchars):
         id2char_dict[i] = char_freq_dict[i][0]
     return char2id_dict, id2char_dict
 
-L=125
-dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
-allchars = get_allchars(dataset)
+
 char2id_dict, id2char_dict = get_dict(allchars)
 print(len(char2id_dict))
 char2id_dict['</s>'] = 7394
