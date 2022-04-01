@@ -7,6 +7,23 @@ from run import app
 import  os
 
 
+L=125
+dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
+allchars = get_allchars(dataset)
+
+
+
+char2id_dict, id2char_dict = get_dict(allchars)
+print(len(char2id_dict))
+char2id_dict['</s>'] = 7394
+char2id_dict['<START>'] = 7395
+char2id_dict['<END>'] = 7396
+id2char_dict[7394] = '</s>'
+id2char_dict[7395] = '<START>'
+id2char_dict[7396] = '<END>'
+
+
+
 def get_allchars(dataset):
     allchars = []
     for i in range(len(dataset)):
@@ -117,9 +134,7 @@ class Net(paddle.nn.Layer):
         return y, hidden
 
     
-L=125
-dataset = json.load(open(r'/app/唐诗.json', encoding='UTF-8'))
-allchars = get_allchars(dataset)
+
 
 
 
@@ -127,16 +142,7 @@ net = Net()
 model_path = r'/app/net.pdparams'
 net.set_state_dict(P.load(model_path))
 
-
-char2id_dict, id2char_dict = get_dict(allchars)
-print(len(char2id_dict))
-char2id_dict['</s>'] = 7394
-char2id_dict['<START>'] = 7395
-char2id_dict['<END>'] = 7396
-id2char_dict[7394] = '</s>'
-id2char_dict[7395] = '<START>'
-id2char_dict[7396] = '<END>'
-    
+   
     
 
 @app.route('/', methods=['POST'])
